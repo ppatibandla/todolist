@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TodoList</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="new_item">Enter new item</string>
+    <string name="bt_add">Add</string>
+    <string name="et_new_item_hint">Enter new todo item that you want to track</string>
+
+</resources>
