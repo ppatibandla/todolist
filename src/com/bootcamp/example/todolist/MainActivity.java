@@ -7,12 +7,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
 
 import android.R.integer;
+import android.R.string;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,15 +31,19 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.content.Intent;
 
-
+/*
+ * Simple Android app to track to do items. This app support add, remove and edit
+ * functionalities. TodoList App saves to do items to file to persist them.
+ */
 public class MainActivity extends Activity {
-
 	public final static String EXTRA_ITEM = "com.bootcamp.example.todolist.EDITITEM";
 	public final static String EXTRA_POS = "com.bootcamp.example.todolist.POS";
 	public final static int EDIT_ITEM_REQ = 1;
-	ArrayList<String> items;
-	ArrayAdapter<String> itemsAdapter;
-	ListView lvItems;
+	
+	private final String TODO_FILE = "todolist.txt";
+	private ArrayList<String> items;
+	private ArrayAdapter<String> itemsAdapter;
+	private ListView lvItems;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +54,15 @@ public class MainActivity extends Activity {
         lvItems.setAdapter(itemsAdapter);
 
         itemsAdapter.notifyDataSetChanged();
-        setupListViewListner();
+        setupListViewListners();
     }
     
-    private void setupListViewListner(){
+    /*
+     * Register ItemClick and ItemLockClick listeners.
+     * ItemClick : Launch EditAction to edit item.
+     * ItemLongClick : Remove item.
+     */
+    private void setupListViewListners(){
     	lvItems.setOnItemLongClickListener(new OnItemLongClickListener() {
     		public boolean onItemLongClick(AdapterView<?> parent, View v, int pos, long id ) {
     			items.remove(pos);
@@ -68,17 +79,24 @@ public class MainActivity extends Activity {
     			intent.putExtra(EXTRA_ITEM, items.get(pos));
     			intent.putExtra(EXTRA_POS, pos);
     			startActivityForResult(intent, EDIT_ITEM_REQ);
-//    			startActivity(intent);
     		}
     	});
     }
     
+    /*
+     * Process the result of Edit Activity. Response should contain
+     * EXTRA_ITEM : Item (String) after edit
+     * EXTRA_POS : position of the item in items, passed in startActivity.
+     * 
+     * Updates item in-memory and on-disk. Refreshes ListView.
+     */
     protected void onActivityResult(int request, int result, Intent data){
     	if (request == EDIT_ITEM_REQ && result == RESULT_OK) {
     		Log.d("EditResult", data.getStringExtra(EXTRA_ITEM));
     		updateItem(data.getStringExtra(EXTRA_ITEM), data.getIntExtra(EXTRA_POS, -1));
     	}
     }
+    
     private void updateItem(String item, int pos){
     	Assert.assertTrue(pos != -1 && pos < items.size());
     	updateItems(item, pos, false);
@@ -88,6 +106,10 @@ public class MainActivity extends Activity {
     	updateItems(item, items.size(), true);
     }
     
+    /*
+     * Updates(/ adds) item in-memory and on-disk items list.
+     * Refreshes ListView.
+     */
     private void updateItems(String item, int pos, Boolean add) {
     	if (add) {
     		items.add(pos, item);
@@ -98,12 +120,20 @@ public class MainActivity extends Activity {
     	saveItems();
     }
     
+    /*
+     * Add item to in-memory and on-disk items list.
+     * Refresh ListView to show new item.
+     */
     public void onbtAddClick(View v){
     	EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
     	addItem(etNewItem.getText().toString());
     	etNewItem.setText("");
     }
     
+    /*
+     * Reads content from reader to List<String>, where each string would
+     * represent one line.
+     */
     private List<String> readLines(Reader in) {
     	BufferedReader reader = new BufferedReader(in);
     	List<String> list = new ArrayList<String>();
@@ -119,9 +149,14 @@ public class MainActivity extends Activity {
     	return list;
     }
     
+    /*
+     * Read to do items from on-disk to do list file into 'items' ArrayList.
+     * To do items should be separated by new line.
+     * 
+     */
     private void readItems(){
     	File filesDir = getFilesDir();
-    	File todoFile = new File(filesDir, "todolist.txt");
+    	File todoFile = new File(filesDir, TODO_FILE);
     	Log.d("readItems", "In readItems");
     	try {
     		items = new ArrayList<String>(readLines(new FileReader(todoFile)));
@@ -134,9 +169,13 @@ public class MainActivity extends Activity {
     	}
     }
     
+    /*
+     * Save to do items in 'items' ArrayList to TODO_FILE. On the disk
+     * to do items will be separated by new line.
+     */
     private void saveItems(){
     	File filesDir = getFilesDir();
-    	File todoFile = new File(filesDir, "todolist.txt");
+    	File todoFile = new File(filesDir, TODO_FILE);
     	Log.d("saveItems", "In saveItems");
     	try {
     		BufferedWriter writer = new BufferedWriter(new FileWriter(todoFile));

@@ -19,8 +19,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:ems="10"
-        android:hint="@string/et_new_item_hint"
-        android:text="@string/new_item" >
+        android:hint="@string/et_new_item_hint" >
 
         <requestFocus />
     </EditText>

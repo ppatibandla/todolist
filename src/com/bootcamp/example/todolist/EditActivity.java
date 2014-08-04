@@ -12,9 +12,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+/*
+ * Provide functionality to edit given string (to do item).
+ * onCreate intent:
+ * EXTRA_ITEM : string (to do item) that user wants to edit
+ * EXTRA_POS  : integer to identify edited to do item on response.
+ * EditActivity treats EXTRA_POS as an opaque integer and it doesn't use it.
+ * 
+ * Result:
+ * EXTRA_ITEM : Edited string (item).
+ * EXTRA_POS  : EXTRA_POS passed in onCreate intent.
+ */
 public class EditActivity extends Activity {
-	public final static String EXTRA_EDITED_ITEM = "com.bootcamp.example.todolist.EDITEDITEM";
 	private int pos;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,7 +42,7 @@ public class EditActivity extends Activity {
 
 	public void onbtSaveClick(View v){
 		String item = ((EditText) findViewById(R.id.etEditItem)).getText().toString();
-		Log.i("On btSave Click", item);
+		Log.d("onbtSaveClick", item);
 		Intent data = new Intent();
 		data.putExtra(MainActivity.EXTRA_ITEM, item);
 		data.putExtra(MainActivity.EXTRA_POS, pos);
