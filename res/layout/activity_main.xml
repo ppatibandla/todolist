@@ -7,11 +7,11 @@
     <ListView
         android:id="@+id/lvItems"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" >
+        android:layout_height="390dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
     </ListView>
-
+    
     <EditText
         android:id="@+id/etNewItem"
         android:layout_width="wrap_content"
