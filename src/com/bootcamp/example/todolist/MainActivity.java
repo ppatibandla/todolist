@@ -44,15 +44,19 @@ public class MainActivity extends Activity {
 	private ArrayList<String> items;
 	private ArrayAdapter<String> itemsAdapter;
 	private ListView lvItems;
+	
+	private TodoListDataSource dataSource;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         lvItems = (ListView) findViewById(R.id.lvItems);
-        readItems();
+        dataSource = new TodoListDB(this);
+        dataSource.open();
+		items = new ArrayList<String>(dataSource.readItems());
         itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
-
         itemsAdapter.notifyDataSetChanged();
         setupListViewListners();
     }
@@ -65,8 +69,8 @@ public class MainActivity extends Activity {
     private void setupListViewListners(){
     	lvItems.setOnItemLongClickListener(new OnItemLongClickListener() {
     		public boolean onItemLongClick(AdapterView<?> parent, View v, int pos, long id ) {
+    			dataSource.deleteItem(items.get(pos));
     			items.remove(pos);
-    			saveItems();
     			itemsAdapter.notifyDataSetChanged();
     			return true;
     		}
@@ -113,11 +117,13 @@ public class MainActivity extends Activity {
     private void updateItems(String item, int pos, Boolean add) {
     	if (add) {
     		items.add(pos, item);
+    		dataSource.addItem(item);
     	} else {
+    		String oldval = items.get(pos); 
     		items.set(pos, item);
+    		dataSource.updateItem(oldval, item);
     	}
     	itemsAdapter.notifyDataSetChanged();
-    	saveItems();
     }
     
     /*
@@ -134,6 +140,7 @@ public class MainActivity extends Activity {
      * Reads content from reader to List<String>, where each string would
      * represent one line.
      */
+/*
     private List<String> readLines(Reader in) {
     	BufferedReader reader = new BufferedReader(in);
     	List<String> list = new ArrayList<String>();
@@ -148,12 +155,13 @@ public class MainActivity extends Activity {
     	}
     	return list;
     }
-    
+*/
     /*
      * Read to do items from on-disk to do list file into 'items' ArrayList.
      * To do items should be separated by new line.
      * 
      */
+/*
     private void readItems(){
     	File filesDir = getFilesDir();
     	File todoFile = new File(filesDir, TODO_FILE);
@@ -168,11 +176,12 @@ public class MainActivity extends Activity {
     		e.printStackTrace();
     	}
     }
-    
+*/    
     /*
      * Save to do items in 'items' ArrayList to TODO_FILE. On the disk
      * to do items will be separated by new line.
      */
+/*
     private void saveItems(){
     	File filesDir = getFilesDir();
     	File todoFile = new File(filesDir, TODO_FILE);
@@ -190,5 +199,5 @@ public class MainActivity extends Activity {
     		e.printStackTrace();
     	}
     }
-    
+ */  
 }
