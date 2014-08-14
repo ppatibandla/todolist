@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
 	
 	private final String TODO_FILE = "todolist.txt";
 	private ArrayList<TodoItem> items;
-	private ArrayAdapter<TodoItem> itemsAdapter;
+	private TodoListViewAdapter itemsAdapter;
 	private ListView lvItems;
 	
 	private TodoListDataSource dataSource;
@@ -57,7 +57,8 @@ public class MainActivity extends Activity {
         dataSource = new TodoListDB(this);
         dataSource.open();
 		items = new ArrayList<TodoItem>(dataSource.readItems());
-        itemsAdapter = new ArrayAdapter<TodoItem>(this, android.R.layout.simple_list_item_1, items);
+        itemsAdapter = new TodoListViewAdapter(this, items);
+        
         lvItems.setAdapter(itemsAdapter);
         itemsAdapter.notifyDataSetChanged();
         setupListViewListners();
