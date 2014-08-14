@@ -72,11 +72,13 @@ public class EditActivity extends Activity
 		}
 		ft.addToBackStack(null);
 		
-		Calendar d = null;
+		Calendar d = Calendar.getInstance();
 		try {
 			d.setTime(TodoItem.dateFormat.parse(item.dueDateStr()));
+			Log.i("onbtDueDateClick", "set inital date of picker to item due date");
 		} catch (Exception e) {
-			d = Calendar.getInstance();
+			// d = Calendar.getInstance();
+			// NOOP, 'd' already has current date. 
 		}
 		DatePickerFragment dpf = new DatePickerFragment(d);
 		dpf.show(ft, "Due Date");

@@ -49,7 +49,7 @@ public class TodoItem implements Serializable {
 	}
 	
 	public String toString() {
-		return dueDate + "\t" + todoString;
+		return dueDate + "\t : " + todoString;
 	}
 	
 }
