@@ -5,7 +5,7 @@ todolist
 
 This is a simple Android to do list app which will allow user to add, remove and edit to do items.
 
-Time Spent: 9 hrs (+ 4hrs on Android setup issues)
+Time Spent: 14 hrs (+ 4hrs on Android setup issues)
  
 ### Functionality:
   - [x] Required : Add a to do item
@@ -13,8 +13,7 @@ Time Spent: 9 hrs (+ 4hrs on Android setup issues)
   - [x] Required : Edit a to do item by touch (/ click)
   - [x] Required : Persisting todo list to a file 
   - [x] Optional : Persist todo app in SQLite instead of using text file.
-
-P.S:
- I am actively working on this project, will try to add other optional features soon.
+  - [x] Optional : Support for due date.
+  - [x] Optional : palyed with ListView to show due date through custom adapter.
 
 ![images/todolist.gif](images/todolist.gif)
