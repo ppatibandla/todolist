@@ -14,7 +14,7 @@ public class TodoListDB implements TodoListDataSource {
 	private SQLiteHelper dbHelper;
 	private SQLiteDatabase db;
 	private String[] allColumns =
-		{SQLiteHelper.COL_ID, SQLiteHelper.COL_ITEM};
+		{SQLiteHelper.COL_ID, SQLiteHelper.COL_ITEM, SQLiteHelper.COL_DUE_DATE};
 	
 	public TodoListDB(Context c) {
 		dbHelper = new SQLiteHelper(c);
@@ -31,9 +31,10 @@ public class TodoListDB implements TodoListDataSource {
 	}
 	
 	@Override
-	public void addItem(String item) {
+	public void addItem(TodoItem item) {
 		ContentValues values = new ContentValues();
-		values.put(SQLiteHelper.COL_ITEM, item);
+		values.put(SQLiteHelper.COL_ITEM, item.todo());
+		values.put(SQLiteHelper.COL_DUE_DATE, item.dueDateStr());
 		db.insert(SQLiteHelper.TO_DO_LIST_TABLE, null, values);
 	}
 
@@ -45,30 +46,32 @@ public class TodoListDB implements TodoListDataSource {
 	 * @see com.bootcamp.example.todolist.TodoListDataSource#updateItem(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void updateItem(String oldval, String newitem) {
+	public void updateItem(TodoItem oldval, TodoItem newitem) {
 		ContentValues values = new ContentValues();
-		values.put(SQLiteHelper.COL_ITEM, newitem);
+		values.put(SQLiteHelper.COL_ITEM, newitem.todo());
+		values.put(SQLiteHelper.COL_DUE_DATE, newitem.dueDateStr());		
 		db.update(SQLiteHelper.TO_DO_LIST_TABLE, values,
-				  SQLiteHelper.COL_ITEM + " = " + "\"" + oldval + "\"", null);
+				  SQLiteHelper.COL_ITEM + " = " + "\"" + oldval.todo() + "\"", null);
 		
 	}
 
 	@Override
-	public void deleteItem(String item) {
+	public void deleteItem(TodoItem item) {
 		db.delete(SQLiteHelper.TO_DO_LIST_TABLE,
-				  SQLiteHelper.COL_ITEM + " = " + "\"" + item + "\"", null);
+				  SQLiteHelper.COL_ITEM + " = " + "\"" + item.todo() + "\"", null);
 	}
 
 	@Override
-	public List<String> readItems() {
-		List<String> items = new ArrayList<String>();
+	public List<TodoItem> readItems() {
+		List<TodoItem> items = new ArrayList<TodoItem>();
+		Log.i("readItems", "Trying to read all items from table");
 		Cursor cursor = db.query(SQLiteHelper.TO_DO_LIST_TABLE,
 								 allColumns, null,
 								 null, null, null, SQLiteHelper.COL_ID);
 		Log.d("readItems", String.valueOf(cursor.getCount()));
 		cursor.moveToFirst();
 		while (! cursor.isAfterLast()) {
-			items.add(cursor.getString(1));
+			items.add(new TodoItem(cursor.getString(1), cursor.getString(2)));
 			cursor.moveToNext();
 		}
 		return items;

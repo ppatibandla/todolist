@@ -32,12 +32,35 @@
     </EditText>
 
     <Button
+        android:id="@+id/btDueDate"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvDueDate"
+        android:layout_alignBottom="@+id/tvDueDate"
+        android:layout_alignRight="@+id/etEditItem"
+        android:layout_toRightOf="@+id/tvEditItem"
+        android:onClick="onbtDueDateClick"
+        android:text="@string/lblDueDate" />
+
+    <TextView
+        android:id="@+id/tvDueDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etEditItem"
+        android:layout_below="@+id/etEditItem"
+        android:layout_marginTop="22dp"
+        android:text="@string/lblDueDate"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <Button
         android:id="@+id/btSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etEditItem"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
+        android:layout_alignLeft="@+id/tvDueDate"
+        android:layout_alignRight="@+id/btDueDate"
+        android:layout_below="@+id/btDueDate"
+        android:layout_marginTop="33dp"
         android:onClick="onbtSaveClick"
         android:text="@string/btSave" />
 

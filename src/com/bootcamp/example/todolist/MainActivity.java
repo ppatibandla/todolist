@@ -29,6 +29,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.content.Intent;
 
 /*
@@ -38,11 +39,12 @@ import android.content.Intent;
 public class MainActivity extends Activity {
 	public final static String EXTRA_ITEM = "com.bootcamp.example.todolist.EDITITEM";
 	public final static String EXTRA_POS = "com.bootcamp.example.todolist.POS";
+
 	public final static int EDIT_ITEM_REQ = 1;
 	
 	private final String TODO_FILE = "todolist.txt";
-	private ArrayList<String> items;
-	private ArrayAdapter<String> itemsAdapter;
+	private ArrayList<TodoItem> items;
+	private ArrayAdapter<TodoItem> itemsAdapter;
 	private ListView lvItems;
 	
 	private TodoListDataSource dataSource;
@@ -54,8 +56,8 @@ public class MainActivity extends Activity {
         lvItems = (ListView) findViewById(R.id.lvItems);
         dataSource = new TodoListDB(this);
         dataSource.open();
-		items = new ArrayList<String>(dataSource.readItems());
-        itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+		items = new ArrayList<TodoItem>(dataSource.readItems());
+        itemsAdapter = new ArrayAdapter<TodoItem>(this, android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
         itemsAdapter.notifyDataSetChanged();
         setupListViewListners();
@@ -78,15 +80,34 @@ public class MainActivity extends Activity {
     	
     	lvItems.setOnItemClickListener(new OnItemClickListener(){
     		public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
-    			Log.d("OnClick", items.get(pos));
-    			Intent intent = new Intent(MainActivity.this, EditActivity.class);
-    			intent.putExtra(EXTRA_ITEM, items.get(pos));
-    			intent.putExtra(EXTRA_POS, pos);
-    			startActivityForResult(intent, EDIT_ITEM_REQ);
+    			Log.d("OnClick", items.get(pos).todo());
+    			editItem(pos);
     		}
     	});
     }
     
+    private void editItem(int pos) {
+		Intent intent = new Intent(MainActivity.this, EditActivity.class);
+		intent.putExtra(EXTRA_ITEM, items.get(pos));
+		intent.putExtra(EXTRA_POS, pos);
+		startActivityForResult(intent, EDIT_ITEM_REQ);
+    }
+    
+    /*
+     * Add item to in-memory and on-disk items list.
+     * Refresh ListView to show new item.
+     */
+    public void onbtAddClick(View v){
+    	EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
+    	addItem(new TodoItem(etNewItem.getText().toString()));
+    	etNewItem.setText("");
+//    	editItem(items.size() - 1);
+    	showToast("Item Added");
+    }
+    
+    private void showToast(String msg){
+    	Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
+    }
     /*
      * Process the result of Edit Activity. Response should contain
      * EXTRA_ITEM : Item (String) after edit
@@ -96,17 +117,18 @@ public class MainActivity extends Activity {
      */
     protected void onActivityResult(int request, int result, Intent data){
     	if (request == EDIT_ITEM_REQ && result == RESULT_OK) {
-    		Log.d("EditResult", data.getStringExtra(EXTRA_ITEM));
-    		updateItem(data.getStringExtra(EXTRA_ITEM), data.getIntExtra(EXTRA_POS, -1));
+    		// Log.d("EditResult", data.getStringExtra(EXTRA_ITEM));
+    		updateItem((TodoItem)data.getSerializableExtra(EXTRA_ITEM), data.getIntExtra(EXTRA_POS, -1));
+    		showToast("Item Edited");
     	}
     }
     
-    private void updateItem(String item, int pos){
+    private void updateItem(TodoItem item, int pos){
     	Assert.assertTrue(pos != -1 && pos < items.size());
     	updateItems(item, pos, false);
     }
     
-    private void addItem(String item) {
+    private void addItem(TodoItem  item) {
     	updateItems(item, items.size(), true);
     }
     
@@ -114,28 +136,19 @@ public class MainActivity extends Activity {
      * Updates(/ adds) item in-memory and on-disk items list.
      * Refreshes ListView.
      */
-    private void updateItems(String item, int pos, Boolean add) {
+    private void updateItems(TodoItem  item, int pos, Boolean add) {
     	if (add) {
     		items.add(pos, item);
     		dataSource.addItem(item);
     	} else {
-    		String oldval = items.get(pos); 
+    		TodoItem oldval = items.get(pos); 
     		items.set(pos, item);
     		dataSource.updateItem(oldval, item);
     	}
     	itemsAdapter.notifyDataSetChanged();
     }
     
-    /*
-     * Add item to in-memory and on-disk items list.
-     * Refresh ListView to show new item.
-     */
-    public void onbtAddClick(View v){
-    	EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
-    	addItem(etNewItem.getText().toString());
-    	etNewItem.setText("");
-    }
-    
+
     /*
      * Reads content from reader to List<String>, where each string would
      * represent one line.
