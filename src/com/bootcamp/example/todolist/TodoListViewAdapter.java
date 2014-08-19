@@ -1,6 +1,7 @@
 package com.bootcamp.example.todolist;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.ClipData.Item;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 public class TodoListViewAdapter extends BaseAdapter {
 	private static ArrayList<TodoItem> todoItemsList;
+	private static Map<String, Label> labelMap;
 	private LayoutInflater mInflater;
 	
 	static class ViewHolder {
@@ -22,10 +24,13 @@ public class TodoListViewAdapter extends BaseAdapter {
 		TextView dueDate;
 	};
 	
-	public TodoListViewAdapter(Context c, ArrayList<TodoItem> l) {
-		todoItemsList = l;
+	public TodoListViewAdapter(Context c, ArrayList<TodoItem> iList,
+							   Map<String, Label> lMap) {
+		todoItemsList = iList;
+		labelMap = lMap;
 		mInflater = LayoutInflater.from(c);
 	}
+	
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
@@ -44,6 +49,9 @@ public class TodoListViewAdapter extends BaseAdapter {
 		return position;
 	}
 
+	private int getBGColor(TodoItem i) {
+		return Color.parseColor("#"+labelMap.get(i.getLabel()).getColor());
+	}
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
@@ -62,8 +70,9 @@ public class TodoListViewAdapter extends BaseAdapter {
 
 		holder.todoString.setText(item.todo());
 		holder.dueDate.setText(item.dueDateStr());
-		convertView.setBackgroundColor(Color.RED);
-		
+		convertView.setBackgroundColor(getBGColor(item));
+
+		/*
 		if (item.getLabel().equals("High")) {
 			Log.d("TodoListViewAdapter", "label is High");
 			convertView.setBackgroundColor(Color.parseColor("#63D958"));
@@ -74,7 +83,7 @@ public class TodoListViewAdapter extends BaseAdapter {
 			Log.d("TodoListViewAdapter", "label is Low");
 			convertView.setBackgroundColor(Color.parseColor("#BDCDDB"));
 		}
-
+		*/
 		return convertView;
 	}
 

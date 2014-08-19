@@ -9,7 +9,10 @@ import java.io.IOException;
 import java.io.Reader;
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import junit.framework.Assert;
 
@@ -44,9 +47,10 @@ public class MainActivity extends Activity {
 	
 	private final String TODO_FILE = "todolist.txt";
 	private ArrayList<TodoItem> items;
+	
 	private TodoListViewAdapter itemsAdapter;
 	private ListView lvItems;
-	
+	private Map<String, Label> labelMap;
 	private TodoListDataSource dataSource;
 	
     @Override
@@ -57,7 +61,14 @@ public class MainActivity extends Activity {
         dataSource = new TodoListDB(this);
         dataSource.open();
 		items = new ArrayList<TodoItem>(dataSource.readItems());
-        itemsAdapter = new TodoListViewAdapter(this, items);
+		List<Label> labels = dataSource.readLabels();
+		
+		labelMap = new HashMap<String, Label>();
+		for (Label l : labels) {
+			labelMap.put(l.getLabel(), l);
+		}
+		
+        itemsAdapter = new TodoListViewAdapter(this, items, labelMap);
         
         lvItems.setAdapter(itemsAdapter);
         itemsAdapter.notifyDataSetChanged();
@@ -139,9 +150,15 @@ public class MainActivity extends Activity {
      */
     private void updateItems(TodoItem  item, int pos, Boolean add) {
     	if (add) {
+    		if (labelMap.get(item.getLabel()) == null) {
+    			addLabel(item.getLabel());
+    		}
     		items.add(pos, item);
     		dataSource.addItem(item);
     	} else {
+    		if (labelMap.get(item.getLabel()) == null) {
+    			addLabel(item.getLabel());
+    		}
     		TodoItem oldval = items.get(pos); 
     		items.set(pos, item);
     		dataSource.updateItem(oldval, item);
@@ -149,7 +166,12 @@ public class MainActivity extends Activity {
     	itemsAdapter.notifyDataSetChanged();
     }
     
-
+    private void addLabel(String l){
+		Label label = new Label(l, Integer.toHexString(((int)(Math.random() * 0xFFFFFF))));
+		dataSource.addLabel(label);
+		labelMap.put(l, label);
+    }
+    
     /*
      * Reads content from reader to List<String>, where each string would
      * represent one line.

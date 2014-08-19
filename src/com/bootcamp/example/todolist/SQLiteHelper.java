@@ -21,9 +21,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 	public static final String COL_ITEM = "item";
 	public static final String COL_ID = "_id";
 	public static final String COL_DUE_DATE = "due_date";
-	public static final String COL_LABEL = "label";
-	
+	public static final String COL_LABEL = "label";	
 	public static final String COL_LABEL_COLOR = "label_color";
+	
 	private static final String CREATE_TO_DO_TABLE = "create table " + TO_DO_LIST_TABLE
 				+ "(" + COL_ID + " integer primary key autoincrement, "
 				+ COL_ITEM + " text not null, "
@@ -31,7 +31,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 				+ COL_LABEL + " text not null);";
 	private static final String CREATE_LABEL_TABLE = "create table " + LABEL_TABLE
 			+ "(" + COL_LABEL + " text not null primary key, "
-			+ COL_LABEL_COLOR + " integer);";
+			+ COL_LABEL_COLOR + " text not null);";
 
 			public SQLiteHelper(Context con){
 		super(con, DB_NAME, null, DB_VERSION);

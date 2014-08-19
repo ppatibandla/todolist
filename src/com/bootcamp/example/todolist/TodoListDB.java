@@ -82,4 +82,45 @@ public class TodoListDB implements TodoListDataSource {
 		return items;
 	}
 
+	@Override
+	public void addLabel(Label l){
+		ContentValues values = new ContentValues();
+		values.put(SQLiteHelper.COL_LABEL, l.getLabel());
+		values.put(SQLiteHelper.COL_LABEL_COLOR, l.getColor());
+		db.insert(SQLiteHelper.LABEL_TABLE, null, values);		
+	}
+	
+	@Override
+	public void updateLabel(Label l) {
+		ContentValues values = new ContentValues();
+		values.put(SQLiteHelper.COL_LABEL, l.getLabel());
+		values.put(SQLiteHelper.COL_LABEL_COLOR, l.getColor());
+		db.update(SQLiteHelper.LABEL_TABLE, values,
+				  SQLiteHelper.COL_LABEL + " = " + "\"" + l.getLabel() + "\"", null);		
+	}
+	
+	@Override
+	public void deleteLabel(Label l) {
+		db.delete(SQLiteHelper.LABEL_TABLE,
+				  SQLiteHelper.COL_LABEL + " = " + "\"" + l.getLabel() + "\"", null);
+	}
+	
+	@Override
+	public List<Label> readLabels() {
+		List<Label> labels = new ArrayList<Label>();
+		Cursor cursor = db.query(SQLiteHelper.LABEL_TABLE, null, null, null, null, null, null, null);
+		
+		Log.d("readLabels", String.valueOf(cursor.getCount()));
+		for (String i : cursor.getColumnNames()) {
+			Log.d("readLabels", i);
+		}
+		
+		cursor.moveToFirst();
+		while (! cursor.isAfterLast()) {
+			Log.d("readLabels", cursor.getString(0) + ", " + cursor.getShort(1));
+			labels.add(new Label(cursor.getString(0), cursor.getString(1)));
+			cursor.moveToNext();
+		}
+		return labels;
+	}
 }
