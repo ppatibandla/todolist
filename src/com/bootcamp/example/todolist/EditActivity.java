@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.bootcamp.example.todolist.DatePickerFragment.DatePickerFragmentListner;
+import com.bootcamp.example.todolist.R.id;
 
 import junit.framework.Assert;
 import android.R.string;
@@ -17,6 +18,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -50,12 +53,21 @@ public class EditActivity extends Activity
 		
 		Button btDueDate = (Button) findViewById(R.id.btDueDate);
 		btDueDate.setText(item.dueDateStr());
+
+		AutoCompleteTextView actvLabel = (AutoCompleteTextView) findViewById(R.id.actvLabel);
+		String[] labels = {"High", "Medium", "Low"};
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, labels);
+		actvLabel.setAdapter(adapter);
+		actvLabel.setText(item.getLabel());
 	}
 
 	public void onbtSaveClick(View v){
 		String todo = ((EditText) findViewById(R.id.etEditItem)).getText().toString();
 		item.setTodo(todo);
-		Log.d("onbtSaveClick", item.todo());
+		String label = ((AutoCompleteTextView)findViewById(R.id.actvLabel)).getText().toString();
+		item.setLabel(label.trim());
+
+		Log.d("onbtSaveClick", item.todo() + " " + item.getLabel());
 		Intent data = new Intent();
 		data.putExtra(MainActivity.EXTRA_ITEM, item);
 		data.putExtra(MainActivity.EXTRA_POS, pos);

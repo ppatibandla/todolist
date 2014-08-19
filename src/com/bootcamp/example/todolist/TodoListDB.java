@@ -14,7 +14,7 @@ public class TodoListDB implements TodoListDataSource {
 	private SQLiteHelper dbHelper;
 	private SQLiteDatabase db;
 	private String[] allColumns =
-		{SQLiteHelper.COL_ID, SQLiteHelper.COL_ITEM, SQLiteHelper.COL_DUE_DATE};
+		{SQLiteHelper.COL_ID, SQLiteHelper.COL_ITEM, SQLiteHelper.COL_DUE_DATE, SQLiteHelper.COL_LABEL};
 	
 	public TodoListDB(Context c) {
 		dbHelper = new SQLiteHelper(c);
@@ -35,6 +35,7 @@ public class TodoListDB implements TodoListDataSource {
 		ContentValues values = new ContentValues();
 		values.put(SQLiteHelper.COL_ITEM, item.todo());
 		values.put(SQLiteHelper.COL_DUE_DATE, item.dueDateStr());
+		values.put(SQLiteHelper.COL_LABEL, item.getLabel());
 		db.insert(SQLiteHelper.TO_DO_LIST_TABLE, null, values);
 	}
 
@@ -49,7 +50,8 @@ public class TodoListDB implements TodoListDataSource {
 	public void updateItem(TodoItem oldval, TodoItem newitem) {
 		ContentValues values = new ContentValues();
 		values.put(SQLiteHelper.COL_ITEM, newitem.todo());
-		values.put(SQLiteHelper.COL_DUE_DATE, newitem.dueDateStr());		
+		values.put(SQLiteHelper.COL_DUE_DATE, newitem.dueDateStr());
+		values.put(SQLiteHelper.COL_LABEL, newitem.getLabel());
 		db.update(SQLiteHelper.TO_DO_LIST_TABLE, values,
 				  SQLiteHelper.COL_ITEM + " = " + "\"" + oldval.todo() + "\"", null);
 		
@@ -69,9 +71,12 @@ public class TodoListDB implements TodoListDataSource {
 								 allColumns, null,
 								 null, null, null, SQLiteHelper.COL_ID);
 		Log.d("readItems", String.valueOf(cursor.getCount()));
+		for (String i : cursor.getColumnNames()) {
+			Log.d("readItems", i);
+		}
 		cursor.moveToFirst();
 		while (! cursor.isAfterLast()) {
-			items.add(new TodoItem(cursor.getString(1), cursor.getString(2)));
+			items.add(new TodoItem(cursor.getString(1), cursor.getString(2), cursor.getString(3)));
 			cursor.moveToNext();
 		}
 		return items;

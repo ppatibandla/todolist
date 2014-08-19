@@ -14,19 +14,26 @@ import android.util.Log;
  *
  */
 public class SQLiteHelper extends SQLiteOpenHelper {
-	private static final int DB_VERSION = 3;
+	private static final int DB_VERSION = 1;
 	private static final String DB_NAME = "todolist.db";
 	public static final String TO_DO_LIST_TABLE = "todolist";
+	public static final String LABEL_TABLE = "label";
 	public static final String COL_ITEM = "item";
 	public static final String COL_ID = "_id";
 	public static final String COL_DUE_DATE = "due_date";
+	public static final String COL_LABEL = "label";
 	
-	private static final String CREATE_DB = "create table " + TO_DO_LIST_TABLE
+	public static final String COL_LABEL_COLOR = "label_color";
+	private static final String CREATE_TO_DO_TABLE = "create table " + TO_DO_LIST_TABLE
 				+ "(" + COL_ID + " integer primary key autoincrement, "
 				+ COL_ITEM + " text not null, "
-				+ COL_DUE_DATE + " text not null);";
-	
-	public SQLiteHelper(Context con){
+				+ COL_DUE_DATE + " text not null, "
+				+ COL_LABEL + " text not null);";
+	private static final String CREATE_LABEL_TABLE = "create table " + LABEL_TABLE
+			+ "(" + COL_LABEL + " text not null primary key, "
+			+ COL_LABEL_COLOR + " integer);";
+
+			public SQLiteHelper(Context con){
 		super(con, DB_NAME, null, DB_VERSION);
 	}
 	
@@ -36,7 +43,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(CREATE_DB);
+		// First clear existing tables.
+		String DELETE_TO_DO_TABLE = "Drop table if exists " + TO_DO_LIST_TABLE;
+		String DELETE_LABEL_TABLE = "Drop table if exists " + LABEL_TABLE;
+		db.execSQL(DELETE_TO_DO_TABLE);
+		db.execSQL(DELETE_LABEL_TABLE);
+		db.execSQL(CREATE_TO_DO_TABLE);
+		db.execSQL(CREATE_LABEL_TABLE);
 	}
 
 	/* (non-Javadoc)
@@ -45,11 +58,17 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
-		if (newVersion > oldVersion) {
+/*		if (oldVersion < 3) {
 			String alterCmd = "ALTER TABLE " + TO_DO_LIST_TABLE + " add COLUMN " + COL_DUE_DATE + " text";
 			db.execSQL(alterCmd);
 			Log.i("onUpgrade", " Added column due_date");
 		}
+		if (oldVersion < DB_VERSION) {
+			String alterCmd = "ALTER TABLE " + TO_DO_LIST_TABLE + " add COLUMN " + COL_LABEL + " text";
+			db.execSQL(alterCmd);
+			Log.i("onUpgrade", " Added column label");
+		}
+*/
 	}
 
 }

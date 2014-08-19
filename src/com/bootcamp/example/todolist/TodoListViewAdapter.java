@@ -3,7 +3,10 @@ package com.bootcamp.example.todolist;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.ClipData.Item;
+import android.graphics.Color;
 import android.text.StaticLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,9 +57,24 @@ public class TodoListViewAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
+		TodoItem item = todoItemsList.get(position);
+		Log.d("TodoListViewAdapter", item.todo() + " " + item.dueDateStr() + " ," + item.getLabel()+";");
+
+		holder.todoString.setText(item.todo());
+		holder.dueDate.setText(item.dueDateStr());
+		convertView.setBackgroundColor(Color.RED);
 		
-		holder.todoString.setText(todoItemsList.get(position).todo());
-		holder.dueDate.setText(todoItemsList.get(position).dueDateStr());
+		if (item.getLabel().equals("High")) {
+			Log.d("TodoListViewAdapter", "label is High");
+			convertView.setBackgroundColor(Color.parseColor("#63D958"));
+		} else if (item.getLabel().equals("Medium")) {
+			Log.d("TodoListViewAdapter", "label is Medium");
+			convertView.setBackgroundColor(Color.parseColor("#58D9D0"));
+		} else if (item.getLabel().equals("Low")) {
+			Log.d("TodoListViewAdapter", "label is Low");
+			convertView.setBackgroundColor(Color.parseColor("#BDCDDB"));
+		}
+
 		return convertView;
 	}
 

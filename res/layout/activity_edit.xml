@@ -53,15 +53,35 @@
         android:text="@string/lblDueDate"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
+    <AutoCompleteTextView
+        android:id="@+id/actvLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btDueDate"
+        android:layout_alignRight="@+id/btDueDate"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:text="@string/lblLow" />
+
     <Button
         android:id="@+id/btSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvDueDate"
         android:layout_alignRight="@+id/btDueDate"
-        android:layout_below="@+id/btDueDate"
-        android:layout_marginTop="33dp"
+        android:layout_below="@+id/actvLabel"
+        android:layout_marginTop="26dp"
         android:onClick="onbtSaveClick"
         android:text="@string/btSave" />
+
+    <TextView
+        android:id="@+id/tvLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/actvLabel"
+        android:layout_alignBottom="@+id/actvLabel"
+        android:layout_alignRight="@+id/tvDueDate"
+        android:text="@string/lblPriority"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

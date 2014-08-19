@@ -11,5 +11,8 @@
     <string name="btSave">Save</string>
     <string name="lblEditItem">Edit Item Below</string>
     <string name="lblDueDate">Due Date</string>
+    <string name="label">"Label "</string>
+    <string name="lblLow">Low</string>
+    <string name="lblPriority">Priority</string>
 
 </resources>
