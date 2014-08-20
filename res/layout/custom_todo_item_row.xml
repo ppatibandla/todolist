@@ -22,7 +22,7 @@
         android:layout_alignParentRight="true"
         android:text="@string/lblDueDate"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#FF0000"
+        android:textStyle="italic"
         android:textSize="14sp" />
 
 </RelativeLayout>

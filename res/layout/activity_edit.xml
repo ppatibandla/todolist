@@ -61,7 +61,7 @@
         android:layout_alignRight="@+id/btDueDate"
         android:layout_centerVertical="true"
         android:ems="10"
-        android:text="@string/lblLow" />
+        android:text="@string/lblMisc" />
 
     <Button
         android:id="@+id/btSave"
@@ -81,7 +81,7 @@
         android:layout_alignBaseline="@+id/actvLabel"
         android:layout_alignBottom="@+id/actvLabel"
         android:layout_alignRight="@+id/tvDueDate"
-        android:text="@string/lblPriority"
+        android:text="@string/label"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

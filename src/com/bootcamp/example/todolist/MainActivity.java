@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.content.Intent;
+import android.graphics.Color;
 
 /*
  * Simple Android app to track to do items. This app support add, remove and edit
@@ -167,7 +168,12 @@ public class MainActivity extends Activity {
     }
     
     private void addLabel(String l){
-		Label label = new Label(l, Integer.toHexString(((int)(Math.random() * 0xFFFFFF))));
+    	int temp = (int)(Math.random() * 0xFFFFFF);
+    	int color = Color.rgb((temp >> 16)&0xFF,
+    						  (temp >> 8)&0xFF,
+    						  temp & 0xFF);
+		Label label =
+				new Label(l, Integer.toHexString(color));
 		dataSource.addLabel(label);
 		labelMap.put(l, label);
     }

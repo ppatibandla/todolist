@@ -50,6 +50,7 @@ public class TodoListViewAdapter extends BaseAdapter {
 	}
 
 	private int getBGColor(TodoItem i) {
+		Log.d("getBGColor", "#"+labelMap.get(i.getLabel()).getColor());
 		return Color.parseColor("#"+labelMap.get(i.getLabel()).getColor());
 	}
 	@Override

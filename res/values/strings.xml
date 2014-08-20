@@ -14,5 +14,6 @@
     <string name="label">"Label "</string>
     <string name="lblLow">Low</string>
     <string name="lblPriority">Priority</string>
+    <string name="lblMisc">Misc</string>
 
 </resources>

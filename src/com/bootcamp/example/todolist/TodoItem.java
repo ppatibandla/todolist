@@ -10,7 +10,7 @@ public class TodoItem implements Serializable {
 	private int id;
 	private String todoString;
 	private String dueDate = "No Due Date";
-	private String label = "Low";
+	private String label = "Misc";
 	public static java.text.DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
 	TodoItem(String todo) {
