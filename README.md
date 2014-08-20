@@ -17,8 +17,9 @@ Time Spent: 14 hrs (+ 4hrs on Android setup issues)
   - [x] Optional : palyed with ListView to show due date through custom adapter.
   - [x] Optional : Support for priority.
   - [x] Optional : Change background color of todo item based on priority.
+  - [x] Optional : Custom label (with random color for each label).
 
 Next step:
- Add support for adding a new label and picking color for it.
+ Let user pick color for label.
 
 ![images/todolist.gif](images/todolist.gif)
